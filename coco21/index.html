@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Coco 21 ♡</title>
+<style>
+html,body{height:100%;margin:0}body{display:grid;place-items:center;background:radial-gradient(circle at 20% 20%,#dff5ff,transparent 35%),radial-gradient(circle at 80% 25%,#ffe1ef,transparent 35%),linear-gradient(145deg,#fbfdff,#fff7fb,#f7f2ff);font-family:system-ui,-apple-system,sans-serif;color:#665675}.box{text-align:center;padding:28px}.heart{font-size:44px;animation:p 1.2s ease-in-out infinite}.title{font-size:22px;font-weight:800;margin:10px 0}.sub{font-size:13px;opacity:.7}.bar{width:min(300px,72vw);height:7px;background:#fff;border-radius:999px;overflow:hidden;margin:18px auto;box-shadow:0 5px 18px #b99aca33}.fill{height:100%;width:8%;background:linear-gradient(90deg,#8fdcff,#c7a8ff,#ffacd0);border-radius:999px;transition:.25s}@keyframes p{50%{transform:scale(1.12)}}
+</style>
+</head>
+<body>
+<div class="box"><div class="heart">♡</div><div class="title">Opening Coco 21…</div><div class="sub" id="status">loading birthday memories</div><div class="bar"><div class="fill" id="fill"></div></div></div>
+<script>
+(async()=>{
+ try{
+  const base='https://raw.githubusercontent.com/ayephyusinsoejcu/a2/main/coco21/';
+  let b64='';
+  for(let i=1;i<=9;i++){
+   const n=String(i).padStart(2,'0');
+   const r=await fetch(base+'p'+n+'.txt',{cache:'no-store'});
+   if(!r.ok) throw new Error('payload part '+n+' failed');
+   b64+=(await r.text()).trim();
+   document.getElementById('fill').style.width=(i/9*94)+'%';
+   document.getElementById('status').textContent='loading memories '+i+'/9';
+  }
+  if(typeof DecompressionStream==='undefined') throw new Error('This browser is too old. Please open with Safari or Chrome.');
+  const bin=atob(b64), bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  const ds=new DecompressionStream('gzip');
+  const html=await new Response(new Blob([bytes]).stream().pipeThrough(ds)).text();
+  document.getElementById('fill').style.width='100%';
+  document.open();document.write(html);document.close();
+ }catch(e){
+  document.getElementById('status').textContent='Could not open. Please refresh or open with Safari/Chrome.';
+  document.querySelector('.title').textContent='Coco 21 ♡';
+  console.error(e);
+ }
+})();
+</script>
+</body>
+</html>
